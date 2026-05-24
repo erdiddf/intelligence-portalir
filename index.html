@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTELLIGENCE MANAGEMENT SYSTEM // SECURE PORTAL</title>
+    <style>
+        /* ---------------------------------------------------------
+           SYSTEM SPECIFICATIONS & DESIGN TOKENS
+           --------------------------------------------------------- */
+        :root {
+            --bg-primary: #0a0b0d;
+            --bg-secondary: #111317;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-active: rgba(255, 255, 255, 0.25);
+            
+            /* Typography */
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "SF Mono", SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            
+            /* Functional Accents */
+            --text-muted: #626875;
+            --text-body: #c5cbd3;
+            --text-critical: #ff3b30;
+            --text-active: #ffffff;
+            --accent-glow: #00ff66;
+        }
+
+        /* ---------------------------------------------------------
+           BASE RESET & LAYOUT FOUNDATION
+           --------------------------------------------------------- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-body);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+            overflow-x: hidden;
+            padding: 24px;
+        }
+
+        /* ---------------------------------------------------------
+           HEADER ARCHITECTURE (METADATA & BRANDING)
+           --------------------------------------------------------- */
+        header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            border-bottom: 1px solid var(--border-active);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .agency-identity h1 {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-active);
+            line-height: 1.2;
+        }
+
+        .agency-identity .sub-classification {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-critical);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 4px;
+        }
+
+        .system-status {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-align: right;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-glow);
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        /* ---------------------------------------------------------
+           MAIN WORKSPACE (SWISS STRUCTURAL GRID)
+           --------------------------------------------------------- */
+        .workspace {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* ---------------------------------------------------------
+           SIDE PANEL (AUTHENTICATION & CONTROL NAVIGATION)
+           --------------------------------------------------------- */
+        .control-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        .panel-header {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-active);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+
+        .terminal-readout {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .terminal-line {
+            margin-bottom: 4px;
+            white-space: nowrap;
+        }
+
+        .terminal-line span.highlight {
+            color: var(--text-body);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            color: var(--text-active);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus {
+            border-color: var(--border-active);
+        }
+
+        .terminal-btn {
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid var(--border-active);
+            color: var(--text-active);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 10px;
+            cursor: pointer;
+            letter-spacing: 0.08em;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .terminal-btn:hover {
+            background-color: var(--text-active);
+            color: var(--bg-primary);
+        }
+
+        /* ---------------------------------------------------------
+           CONTENT HOUSING (DOSSIER VIEW)
+           --------------------------------------------------------- */
+        .dossier-view {
+            display: grid;
+            gap: 24px;
+        }
+
+        .document-card {
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-secondary);
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .card-body h2 {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-active);
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .card-body p {
+            color: var(--text-body);
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        /* Technical Data Grid Inside Content */
+        .data-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 16px;
+            margin-top: 8px;
+        }
+
+        .matrix-item {
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+
+        .matrix-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 9px;
+            margin-bottom: 2px;
+        }
+
+        .matrix-value {
+            color: var(--text-body);
+        }
+
+        /* ---------------------------------------------------------
+           FOOTER SYSTEMS
+           --------------------------------------------------------- */
+        footer {
+            margin-top: 48px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Responsive handling retaining structural composition */
+        @media (max-width: 768px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+            .data-matrix {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SYSTEM HEADER -->
+    <header>
+        <div class="agency-identity">
+            <h1>Strategic Intelligence Network</h1>
+            <div class="sub-classification">Classification: Top Secret // No Forn</div>
+        </div>
+        <div class="system-status">
+            <div><span class="status-indicator"></span>Node: Active</div>
+            <div style="margin-top: 4px;">Sys.Ref: 882-Alpha</div>
+        </div>
+    </header>
+
+    <!-- MAIN WORKSPACE SETUP -->
+    <div class="workspace">
+        
+        <!-- SIDE CONTROLS -->
+        <aside class="control-panel">
+            <div class="panel-header">Identity Verification</div>
+            
+            <div class="terminal-readout">
+                <div class="terminal-line">IP: <span class="highlight">Locating...</span></div>
+                <div class="terminal-line">Port: <span class="highlight">RESTRICTED</span></div>
+                <div class="terminal-line">Status: <span class="highlight">Awaiting Auth</span></div>
+            </div>
+
+            <form onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <label for="agent-id">Operator ID</label>
+                    <input type="text" id="agent-id" autocomplete="off" placeholder="X-0000">
+                </div>
+                <div class="form-group">
+                    <label for="pass-phrase">Passkey</label>
+                    <input type="password" id="pass-phrase" placeholder="••••••••">
+                </div>
+                <button type="submit" class="terminal-btn">Execute Access</button>
+            </form>
+        </aside>
+
+        <!-- SECURE DATA CONTAINER -->
+        <main class="dossier-view">
+            
+            <!-- ENTRY 01 -->
+            <article class="document-card">
+                <div class="card-meta">
+                    <span>File Ref: DC-9901-B</span>
+                    <span>Issued: 2026.05.24</span>
+                </div>
+                <div class="card-body">
+                    <h2>Operation Blueprint: Overview</h2>
+                    <p>This terminal handles decentralized transmission nodes. Access authorization limits observation rights to raw system metadata only. Structural architecture demands a purely functional layout layer, removing extraneous components to guarantee cryptographic overhead efficiency.</p>
+                    
+                    <div class="data-matrix">
+                        <div class="matrix-item">
+                            <div class="matrix-label">Clearance Code</div>
+                            <div class="matrix-value">Level 05 // Executive</div>
+                        </div>
+                        <div class="matrix-item">
+                            <div class="matrix-label">Encryption Type</div>
+                            <div class="matrix-value">AES-GCM-256</div>
+                        </div>
+                        <div class="matrix-item">
+                            <div class="matrix-label">Routing Gateway</div>
+                            <div class="matrix-value">Direct Link</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ENTRY 02 -->
+            <article class="document-card">
+                <div class="card-meta">
+                    <span>File Ref: DC-9902-B</span>
+                    <span>Issued: System Standard</span>
+                </div>
+                <div class="card-body">
+                    <h2>Node Logistics</h2>
+                    <p>Peripheral monitoring vectors remain operational. All log events append automatically to the local container manifest. Unauthorized structural changes within the grid layout layer will isolate host connection protocols instantly.</p>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <!-- SYSTEM FOOTER -->
+    <footer>
+        <span>System Terminal v4.02-Stable</span>
+        <span>Secure Session Context</span>
+    </footer>
+
+</body>
+</html>
