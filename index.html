@@ -26,9 +26,6 @@
             --accent-glow: #00ff66;
         }
 
-        /* ---------------------------------------------------------
-           BASE RESET & LAYOUT FOUNDATION
-           --------------------------------------------------------- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -190,11 +187,16 @@
         }
 
         /* ---------------------------------------------------------
-           CONTENT HOUSING (DOSSIER VIEW)
+           CONTENT HOUSING (DOSSIER VIEW & SECURE STATE)
            --------------------------------------------------------- */
         .dossier-view {
             display: grid;
             gap: 24px;
+        }
+
+        /* Secure content initialized as locked out */
+        .secure-content {
+            display: none;
         }
 
         .document-card {
@@ -232,7 +234,6 @@
             text-align: justify;
         }
 
-        /* Technical Data Grid Inside Content */
         .data-matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -273,108 +274,163 @@
             text-transform: uppercase;
         }
 
-        /* Responsive handling retaining structural composition */
         @media (max-width: 768px) {
             .workspace {
                 grid-template-columns: 1fr;
-            }
-            .data-matrix {
-                grid-template-columns: 1fr;
-                gap: 8px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- SYSTEM HEADER -->
     <header>
         <div class="agency-identity">
             <h1>Strategic Intelligence Network</h1>
-            <div class="sub-classification">Classification: Top Secret // No Forn</div>
+            <div class="sub-classification" id="classification-banner">Classification: Restricted // Unauthorized Access Monitored</div>
         </div>
         <div class="system-status">
-            <div><span class="status-indicator"></span>Node: Active</div>
+            <div><span class="status-indicator" id="status-dot" style="background-color: #ff3b30;"></span>Node: <span id="status-text">LOCKED</span></div>
             <div style="margin-top: 4px;">Sys.Ref: 882-Alpha</div>
         </div>
     </header>
 
-    <!-- MAIN WORKSPACE SETUP -->
     <div class="workspace">
         
-        <!-- SIDE CONTROLS -->
         <aside class="control-panel">
             <div class="panel-header">Identity Verification</div>
             
             <div class="terminal-readout">
-                <div class="terminal-line">IP: <span class="highlight">Locating...</span></div>
-                <div class="terminal-line">Port: <span class="highlight">RESTRICTED</span></div>
-                <div class="terminal-line">Status: <span class="highlight">Awaiting Auth</span></div>
+                <div class="terminal-line">Console: <span class="highlight" id="console-log">Awaiting Credentials</span></div>
+                <div class="terminal-line">Session: <span class="highlight" id="session-log">Unverified</span></div>
             </div>
 
-            <form onsubmit="event.preventDefault();">
+            <form id="login-form">
                 <div class="form-group">
                     <label for="agent-id">Operator ID</label>
-                    <input type="text" id="agent-id" autocomplete="off" placeholder="X-0000">
+                    <input type="text" id="agent-id" autocomplete="off" required placeholder="X-0000">
                 </div>
                 <div class="form-group">
                     <label for="pass-phrase">Passkey</label>
-                    <input type="password" id="pass-phrase" placeholder="••••••••">
+                    <input type="password" id="pass-phrase" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="terminal-btn">Execute Access</button>
+                <button type="submit" class="terminal-btn" id="submit-btn">Execute Access</button>
             </form>
         </aside>
 
-        <!-- SECURE DATA CONTAINER -->
         <main class="dossier-view">
             
-            <!-- ENTRY 01 -->
-            <article class="document-card">
+            <article class="document-card" id="gate-card">
                 <div class="card-meta">
-                    <span>File Ref: DC-9901-B</span>
-                    <span>Issued: 2026.05.24</span>
+                    <span>System Warning</span>
                 </div>
                 <div class="card-body">
-                    <h2>Operation Blueprint: Overview</h2>
-                    <p>This terminal handles decentralized transmission nodes. Access authorization limits observation rights to raw system metadata only. Structural architecture demands a purely functional layout layer, removing extraneous components to guarantee cryptographic overhead efficiency.</p>
-                    
-                    <div class="data-matrix">
-                        <div class="matrix-item">
-                            <div class="matrix-label">Clearance Code</div>
-                            <div class="matrix-value">Level 05 // Executive</div>
-                        </div>
-                        <div class="matrix-item">
-                            <div class="matrix-label">Encryption Type</div>
-                            <div class="matrix-value">AES-GCM-256</div>
-                        </div>
-                        <div class="matrix-item">
-                            <div class="matrix-label">Routing Gateway</div>
-                            <div class="matrix-value">Direct Link</div>
-                        </div>
-                    </div>
+                    <h2>Access Required</h2>
+                    <p>The operational workspace is hidden behind cryptographic confirmation. Provide an authentic identity profile matching an active deployment ledger via the verification module to initialize decryption routines.</p>
                 </div>
             </article>
 
-            <!-- ENTRY 02 -->
-            <article class="document-card">
-                <div class="card-meta">
-                    <span>File Ref: DC-9902-B</span>
-                    <span>Issued: System Standard</span>
-                </div>
-                <div class="card-body">
-                    <h2>Node Logistics</h2>
-                    <p>Peripheral monitoring vectors remain operational. All log events append automatically to the local container manifest. Unauthorized structural changes within the grid layout layer will isolate host connection protocols instantly.</p>
-                </div>
-            </article>
+            <div class="secure-content" id="secure-workspace">
+                <article class="document-card">
+                    <div class="card-meta">
+                        <span>File Ref: DC-9901-B</span>
+                        <span>Issued: 2026.05.24</span>
+                    </div>
+                    <div class="card-body">
+                        <h2>Operation Blueprint: Verified View</h2>
+                        <p>Decryption baseline stabilized. Transmission vectors indicate full network integrity. This workspace displays actual data streams pulled relative to authorized credentials.</p>
+                        
+                        <div class="data-matrix">
+                            <div class="matrix-item">
+                                <div class="matrix-label">Clearance Code</div>
+                                <div class="matrix-value">Level 05 // Executive</div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="matrix-label">Encryption Type</div>
+                                <div class="matrix-value">AES-GCM-256</div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="matrix-label">Routing Gateway</div>
+                                <div class="matrix-value">Verified Channel</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
 
         </main>
     </div>
 
-    <!-- SYSTEM FOOTER -->
     <footer>
         <span>System Terminal v4.02-Stable</span>
-        <span>Secure Session Context</span>
+        <span id="footer-context">Secure Session Context</span>
     </footer>
 
+    <script>
+        // Pre-computed cryptographic SHA-256 signatures for the verification layer
+        // This prevents the raw string from being visibly exposed in plain text inside the script.
+        const VALIDATION_MANIFEST = {
+            idHash: "7b1341c278912e69b596283ee91f27807662c1409f584f2ff5b4e760c490e5ec", // Signature for specific ID
+            keyHash: "6c650df447849e7b2e67a760f3fc0d087799539d09c25fdb8b08fa0da4aa8096" // Signature for specific Passkey
+        };
+
+        // Utility helper to convert raw input strings to a SHA-256 hex string
+        async function calculateSignature(inputString) {
+            const encoder = new TextEncoder();
+            const dataData = encoder.encode(inputString);
+            const rawHash = await crypto.subtle.digest('SHA-256', dataData);
+            return Array.from(new Uint8Array(rawHash))
+                        .map(b => b.toString(16).padStart(2, '0'))
+                        .join('');
+        }
+
+        // Processing Logic
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const idInput = document.getElementById('agent-id').value.trim();
+            const keyInput = document.getElementById('pass-phrase').value;
+            
+            const consoleLog = document.getElementById('console-log');
+            const sessionLog = document.getElementById('session-log');
+            
+            consoleLog.textContent = "Processing...";
+            
+            // Generate signatures from user input
+            const generatedIdHash = await calculateSignature(idInput);
+            const generatedKeyHash = await calculateSignature(keyInput);
+            
+            // Compare signatures against the immutable manifest
+            if (generatedIdHash === VALIDATION_MANIFEST.idHash && generatedKeyHash === VALIDATION_MANIFEST.keyHash) {
+                // Access Granted Routines
+                consoleLog.textContent = "Authorized";
+                consoleLog.style.color = "#00ff66";
+                sessionLog.textContent = "Active Profile";
+                sessionLog.style.color = "#00ff66";
+                
+                // UI Mutations
+                document.getElementById('status-dot').style.background = "#00ff66";
+                document.getElementById('status-text').textContent = "ACTIVE";
+                document.getElementById('classification-banner').textContent = "Classification: Top Secret // Session Established";
+                document.getElementById('classification-banner').style.color = "#00ff66";
+                
+                // Hide Gate, Render Secure Elements
+                document.getElementById('gate-card').style.display = "none";
+                document.getElementById('secure-workspace').style.display = "block";
+                
+                // Disable input interaction
+                document.getElementById('agent-id').disabled = true;
+                document.getElementById('pass-phrase').disabled = true;
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('submit-btn').textContent = "Terminal Bound";
+            } else {
+                // Access Denied Routines
+                consoleLog.textContent = "Validation Failure";
+                consoleLog.style.color = "#ff3b30";
+                sessionLog.textContent = "Rejected / Logged";
+                sessionLog.style.color = "#ff3b30";
+                document.getElementById('pass-phrase').value = "";
+            }
+        });
+    </script>
 </body>
 </html>
